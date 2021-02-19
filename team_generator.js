@@ -5,6 +5,7 @@ const fs = require('fs');
 
 // teammate 
 const group = [];
+const htmlGroup =[]
 idNum = 1;
 
 
@@ -61,16 +62,10 @@ class Teammate{
 
         }
         else{
-            
-            for(var i = 0; i< group.length;i++){
-                var moreHtml = [];
-                let temp =makeHTML(group[i])
-                moreHtml.push(temp)
-
-
-            }
-          fs.writeFile("outcome/test.html",moreHtml,() => {
-          console.log(moreHtml);
+           
+         
+          fs.writeFile("outcome/test.html",htmlGroup.join('\n'),() => {
+          console.log('file made');
 
    })
 
@@ -152,6 +147,8 @@ inquirer.prompt([
     idNum += 1;
 
     group.push(timmy);
+    var item = makeHTML(timmy);
+    htmlGroup.push(item);
     timmy.continue(timmy.cont);
 
 
@@ -186,6 +183,8 @@ function engineering(continu) {
         console.log(response)
         var jimmy = new Engineer(response.name,continu,response.email,idNum,response.cont,response.github);
         group.push(jimmy);
+        var item = makeHTML(jimmy);
+        htmlGroup.push(item);
         idNum += 1;
         jimmy.continue(jimmy.cont);
     
@@ -224,12 +223,16 @@ function interning(continu) {
         var kimmie = new Intern(response.name,continu,response.email,idNum,response.cont,response.school);
         
         group.push(kimmie);
+        var item = makeHTML(kimmie);
+        htmlGroup.push(item);
         idNum += 1;
         kimmie.continue(kimmie.cont);
     
     
     })
+    console.log(htmlGroup);
 }
+
 
 function validateEmail(email){
     let testing = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
