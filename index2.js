@@ -1,3 +1,7 @@
+const Teammate = require('./lib/teammate')
+const Engineer = require('./lib/engineer')
+const Intern = require('./lib/intern')
+
 const inquirer = require('inquirer');
 const fs = require('fs');
 
@@ -8,12 +12,9 @@ const group = [];
 const htmlGroup =[]
 idNum = 1;
 
-
-const makeHTML = (group) => 
-
-    `
-    
-    <!DOCTYPE html>
+const htmlStart = 
+ 
+    ` <!DOCTYPE html>
     <html lang="en">
     <head>
       <meta charset="UTF-8">
@@ -23,104 +24,40 @@ const makeHTML = (group) =>
     </head>
     <body>
       <div class="jumbotron jumbotron-fluid">
-      <div class="container">
-            <h1>${group.name}</h1>;
-      </div>
-    </div>
-    </body>
-    </html>`;
+      <div class="container"> `
+
+
+
+const makeHTML = (group) => 
+
+    `   
+            <div class="row">
+                <div class="col-3">
+                    <h1>${group.name}</h1>
+                    <h1>${group.title}</h1>
+                    <h1>${group.email}</h1>
+                    <h1>${group.id}</h1>
+                    <h1>${group.unique}<h1>
+                </div>
+            </div>
+  
+    `
+
+    
+const htmlEnd = 
+
+`</div>
+</div>
+</body>
+</html>`;
     
     
     
     
     
-    
-    
 
 
 
-class Teammate{
-    constructor(name,title,id,email,cont){
-        this.name = name;
-        this.title = title;
-        this.email = email;
-        this.id = id;
-        this.cont = cont
-    }
-    officeid(officeID){
-       console.log( this.officeID = officeID);
-    }
-
-    continue(cont){
-        if(cont == "engineer"){
-         
-            engineering(cont)
-
-        }
-        else if(cont == "entern"){
-            interning(cont)
-
-        }
-        else{
-           
-         
-          fs.writeFile("outcome/test.html",htmlGroup.join('\n'),() => {
-          console.log('file made');
-
-   })
-
-
-            console.log("done")
-        
-
-        }
-    }
-}
-
-
-class Engineer extends Teammate {
-
-    constructor(name,title,email,id,cont,github){
-
-    super(name,title,email,id,cont)
-    this.name = name;
-    this.tile = title;
-    this.email = email;
-    this.id = id;
-    this.cont  = cont;
-    this.github = github;
-
-    }
-}
-
-
-class Intern extends Teammate{
-    constructor(name,title,email,id,cont,school){
-    
-        super(name,title,email,id,cont)
-    this.name = name;
-    this.title = title
-    this.email = email;
-    this.id = id;
-    this.cont = cont;
-    this.school = school;
-
-    }
-
-}
-
-// name,title, email, id 
-
-
-// occupation(title){
-    //  maybe new object promed?
-// } 
-
-// subclasses 
-
-// manager engineer intern
-//   officeID       github        school
-//
 
 inquirer.prompt([
     {
@@ -135,15 +72,20 @@ inquirer.prompt([
         validate: validateEmail
     },
     {
+        type:"input",
+        message:"office id?",
+        name:"unique",
+        },
+    {
         type:"list",
         message:"continue?",
-        choices:["engineer","entern","no thanks"],
+        choices:["engineer","intern","no thanks"],
         name:"cont"
     },
 
 ]).then((response)=>{
     console.log(response)
-    var timmy = new Teammate(response.name,"manager",response.email,idNum,response.cont);
+    var timmy = new Teammate(response.name,"manager",idNum,response.email,response.cont,response.unique);
     idNum += 1;
 
     group.push(timmy);
@@ -153,6 +95,8 @@ inquirer.prompt([
 
 
 })
+
+
 
 function engineering(continu) {
     inquirer.prompt([
@@ -169,19 +113,19 @@ function engineering(continu) {
         },
         {
             type:"input",
-            message:"github?",
-            name:"github"
+            message:"Github?",
+            name:"unique"
         },
         {
             type:"list",
             message:"continue?",
-            choices:["engineer","entern","no thanks"],
+            choices:["engineer","intern","no thanks"],
             name:"cont"
         },
     
     ]).then((response)=>{
         console.log(response)
-        var jimmy = new Engineer(response.name,continu,response.email,idNum,response.cont,response.github);
+        var jimmy = new Teammate(response.name,continu,idNum,response.email,response.cont,response.unique);
         group.push(jimmy);
         var item = makeHTML(jimmy);
         htmlGroup.push(item);
@@ -191,6 +135,9 @@ function engineering(continu) {
     
     })
 }
+
+
+
 function interning(continu) {
     inquirer.prompt([
         {
@@ -209,18 +156,18 @@ function interning(continu) {
         {
             type:"input",
             message:"what school?",
-            name:"school"
+            name:"unique"
         },
         {
             type:"list",
             message:"continue?",
-            choices:["engineer","entern","no thanks"],
+            choices:["engineer","intern","no thanks"],
             name:"cont"
         },
     
     ]).then((response)=>{
         console.log(response)
-        var kimmie = new Intern(response.name,continu,response.email,idNum,response.cont,response.school);
+        var kimmie = new Teammate(response.name,continu,idNum,response.email,response.cont,response.unique);
         
         group.push(kimmie);
         var item = makeHTML(kimmie);
@@ -234,6 +181,7 @@ function interning(continu) {
 }
 
 
+
 function validateEmail(email){
     let testing = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
     if(testing){
@@ -242,8 +190,4 @@ function validateEmail(email){
     return false    
 }
 
-
-
-
-
-
+module.exports = {}
