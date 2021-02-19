@@ -1,9 +1,43 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 
+
+
 // teammate 
 const group = [];
 idNum = 1;
+
+
+const makeHTML = (group) => 
+
+    `
+    
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+      <title>Document</title>
+    </head>
+    <body>
+      <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+            <h1>${group.name}</h1>;
+      </div>
+    </div>
+    </body>
+    </html>`;
+    
+    
+    
+    
+    
+    
+    
+
+
+
 class Teammate{
     constructor(name,title,id,email,cont){
         this.name = name;
@@ -28,11 +62,21 @@ class Teammate{
         }
         else{
             
-            fs.writeFile("outcome/test.html",`<h1>${group[0].name}</h1>`,() => {
-                console.log('file made');
-            })
-            console.log(group);
+            for(var i = 0; i< group.length;i++){
+                var moreHtml = [];
+                let temp =makeHTML(group[i])
+                moreHtml.push(temp)
+
+
+            }
+          fs.writeFile("outcome/test.html",moreHtml,() => {
+          console.log(moreHtml);
+
+   })
+
+
             console.log("done")
+        
 
         }
     }
@@ -194,4 +238,9 @@ function validateEmail(email){
     }
     return false    
 }
+
+
+
+
+
 
